@@ -22,7 +22,7 @@ class ConfigLoader {
           throw new Error("Env variable 'CONFIG_FILE_NAME' not found");
         }
         const schema = await $RefParser.dereference(
-          `protocol-server-config/build/${localConfigFileName}`
+          `protocol-server-config/configs/${localConfigFileName}`
         );
 
         this.config = schema;

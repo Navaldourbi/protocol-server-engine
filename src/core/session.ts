@@ -1,7 +1,7 @@
 import { cache } from "./cache";
 import fs from "fs";
 import yaml from "yaml";
-import path from "path";
+import path, { dirname } from "path";
 import $RefParser from "@apidevtools/json-schema-ref-parser";
 import { parseBoolean } from "../utils/utils";
 import { configLoader } from "./loadConfig";
@@ -24,14 +24,14 @@ function loadConfig() {
     try {
       if (localConfig) {
         let config = yaml.parse(
-          fs.readFileSync(path.join(__dirname, "../configs/index.yaml"), "utf8")
+          fs.readFileSync(path.join(__dirname, "../../protocol-server-config/configs/igm.yaml"), "utf8")
         );
 
-        const schema = await $RefParser.dereference(config);
+        const schema:any = await $RefParser.dereference("/Users/naval/Desktop/untitled folder 2/protocol-server-engine/protocol-server-config/configs/igm.yaml");
 
         // this.config = schema;
         config = schema;
-
+        
         resolve(schema[SERVER_TYPE]);
       } else {
         const build_spec = configLoader.getConfig();

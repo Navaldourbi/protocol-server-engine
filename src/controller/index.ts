@@ -66,7 +66,7 @@ const validateIncommingRequest = async (
 
     if (SERVER_TYPE === "BPP") {
       session = await getSession(transaction_id);
-
+      console.log("atttt",session)
       const configObject = configLoader.getConfig();
 
       if (!session?.configName) {
@@ -78,7 +78,7 @@ const validateIncommingRequest = async (
 
       if (!session) {
         const sessionObject = {
-          version: body.context.version,
+          version: body.context.version || body.context.core_version,
           country: body?.context?.location?.country?.code,
           cityCode: body?.context?.location?.city?.code,
           configName: configName || process.env.flow,
@@ -89,7 +89,6 @@ const validateIncommingRequest = async (
       }
     } else {
       session = await findSession(body);
-
       if (!session) {
         console.log("No session exists");
         return res.status(200).send(errorNack);
@@ -174,7 +173,7 @@ const handleRequest = async (
         config = action;
       }
 
-      console.log("config >>>>>", config);
+      console.log("config >>>>>1", config);
 
       const mapping = configLoader.getMapping(session.configName);
       const protocol = mapping ? mapping[config] : null;
@@ -209,10 +208,10 @@ const handleRequest = async (
           urlEndpint = call.callback.endpoint;
           mode = call?.mode || ASYNC_MODE;
         }
-
+        console.log("calls==>",call)
         return call;
       });
-
+      console.log("updateeeeed",updatedCalls)
       updatedSession.calls = updatedCalls;
 
       insertSession(updatedSession);
@@ -222,6 +221,7 @@ const handleRequest = async (
       }
 
       logger.info("mode>>>>>>>>> " + mode);
+      console.log("pathhhhhhhhhhh",`${process.env.BACKEND_SERVER_URL}/${urlEndpint}`,JSON.stringify(response))
       if (mode === ASYNC_MODE) {
         await axios.post(`${process.env.BACKEND_SERVER_URL}/${urlEndpint}`, {
           businessPayload,
@@ -277,10 +277,10 @@ const handleRequest = async (
           urlEndpint = call.callback.endpoint;
           mode = call?.mode || ASYNC_MODE;
         }
-
+        console.log("callls=====>",call)
         return call;
       });
-
+      console.log("updateeeeed2",updatedCalls)
       updatedSession.calls = updatedCalls;
 
       insertSession(updatedSession);
@@ -290,6 +290,7 @@ const handleRequest = async (
       }
 
       logger.info("mode>>>>>>>>> " + mode);
+      console.log("pathhhhhhhhhhh",`${process.env.BACKEND_SERVER_URL}/${urlEndpint}`,JSON.stringify(response))
       if (mode === ASYNC_MODE) {
         await axios.post(`${process.env.BACKEND_SERVER_URL}/${urlEndpint}`, {
           businessPayload, // minified response of response || extract method in buyer mock works on this payload extracts from business payload
@@ -523,7 +524,7 @@ export const updateSession = async (req: Request, res: Response) => {
   }
 
   const session = await getSession(transactionId);
-
+  console.log("sessiondataa",session)
   if (!session) {
     logger.error(`/updateSession api error - No session found`, {
       uuid: logID,
