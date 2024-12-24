@@ -381,7 +381,6 @@ const extractData = (
 
 const createBusinessPayload = (myconfig: any, obj: any) => {
   const payload = {};
-
   try {
     myconfig.map((conf: any) => {
       if (conf.extractionPath) {
@@ -399,7 +398,6 @@ const createBusinessPayload = (myconfig: any, obj: any) => {
         );
       }
     });
-
     return payload;
   } catch (e) {
     logger.info("error while creating bussniss payload", e);

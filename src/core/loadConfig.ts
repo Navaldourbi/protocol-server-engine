@@ -17,7 +17,7 @@ class ConfigLoader {
     try {
       if (localConfig) {
         const localConfigFileName = process.env.CONFIG_FILE_NAME;
-
+        console.log("localConfigfirl",localConfigFileName)
         if (!localConfigFileName) {
           throw new Error("Env variable 'CONFIG_FILE_NAME' not found");
         }

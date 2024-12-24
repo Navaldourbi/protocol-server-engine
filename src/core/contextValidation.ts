@@ -35,7 +35,6 @@ export const contextValidation = (session: any, context: any) => {
 
   try {
     Object.entries(context).forEach((item: any) => {
-      console.log("item", item);
       const [key, value] = item;
 
       switch (key) {

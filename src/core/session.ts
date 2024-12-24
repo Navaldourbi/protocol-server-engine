@@ -27,7 +27,8 @@ function loadConfig() {
           fs.readFileSync(path.join(__dirname, "../../protocol-server-config/configs/igm.yaml"), "utf8")
         );
 
-        const schema:any = await $RefParser.dereference("/Users/naval/Desktop/untitled folder 2/protocol-server-engine/protocol-server-config/configs/igm.yaml");
+        // const schema:any = await $RefParser.dereference("/Users/naval/Desktop/untitled folder 2/protocol-server-engine/protocol-server-config/configs/igm.yaml");//example
+        const schema:any = await $RefParser.dereference(path.join(__dirname, "../../protocol-server-config/configs/igm.yaml"));
 
         // this.config = schema;
         config = schema;

@@ -85,7 +85,9 @@ const validateIncommingRequest = async (
           transaction_id: transaction_id,
         };
         await generateSession(sessionObject);
+        console.log("awaitgenerateSession", await generateSession(sessionObject))
         session = await getSession(transaction_id);
+        console.log("sessionatindex.ts/controller",session)
       }
     } else {
       session = await findSession(body);
@@ -277,10 +279,8 @@ const handleRequest = async (
           urlEndpint = call.callback.endpoint;
           mode = call?.mode || ASYNC_MODE;
         }
-        console.log("callls=====>",call)
         return call;
       });
-      console.log("updateeeeed2",updatedCalls)
       updatedSession.calls = updatedCalls;
 
       insertSession(updatedSession);
@@ -424,8 +424,15 @@ export const businessToBecknMethod = async (body: any, logID: any) => {
     logger.info(`/createPayload api - sending request to gateway`, {
       uuid: logID,
     });
-    const response = await axios.post(`${url}${type}`, becknPayload, header);
-
+    console.log("requesting url",`${url}`,`${type}`,"becknPayload",becknPayload)
+    let response:any
+    try{
+       response = await axios.post(`${url}${type}`, becknPayload, header);
+    }
+    catch(error){
+      console.log(error)
+    }
+    
     let mode = null;
     if (SERVER_TYPE === "BAP") {
       const updatedCalls = updatedSession.calls.map((call: any) => {
@@ -486,12 +493,13 @@ export const businessToBecknMethod = async (body: any, logID: any) => {
         }, 7000);
       });
     } else {
+      console.log("herrrr")
       return {
         status: "true",
         message: {
           updatedSession,
           becknPayload,
-          becknReponse: response.data,
+          becknReponse: response?.data,
         },
         code: 200,
       };
@@ -524,7 +532,6 @@ export const updateSession = async (req: Request, res: Response) => {
   }
 
   const session = await getSession(transactionId);
-  console.log("sessiondataa",session)
   if (!session) {
     logger.error(`/updateSession api error - No session found`, {
       uuid: logID,
